@@ -9,13 +9,12 @@ page = st.sidebar.selectbox('Choose your page', ['users', 'rooms', 'bookings'])
 if page == 'users':
     st.title('ユーザー登録画面')
     with st.form(key='user'):
-        # user_id: int = random.randint(0, 10)
         username: str = st.text_input('ユーザー名', max_chars=12)
         data = {'username': username}
         submit_button = st.form_submit_button(label='ユーザー登録')
 
     if submit_button:
-        url = 'http://127.0.0.1:8000/users'
+        url = 'https://api-reserve-6grf.onrender.com/users'
         res = requests.post(
             url,
             data=json.dumps(data)
@@ -37,7 +36,7 @@ elif page == 'rooms':
         submit_button = st.form_submit_button(label='会議室登録')
 
     if submit_button:
-        url = 'http://127.0.0.1:8000/rooms'
+        url = 'https://api-reserve-6grf.onrender.com/rooms'
         res = requests.post(
             url,
             data=json.dumps(data)
@@ -49,7 +48,7 @@ elif page == 'rooms':
 elif page == 'bookings':
     st.title('会議室予約画面')
     # ユーザー一覧取得
-    url_users = 'http://127.0.0.1:8000/users'
+    url_users = 'https://api-reserve-6grf.onrender.com/users'
     res = requests.get(url_users)
     users = res.json()
     # ユーザー名をキー、ユーザーIDをバリュー
@@ -58,7 +57,7 @@ elif page == 'bookings':
         users_name[user['username']] = user['user_id']
 
     # 会議室一覧の取得
-    url_rooms = 'http://127.0.0.1:8000/rooms'
+    url_rooms = 'https://api-reserve-6grf.onrender.com/rooms'
     res = requests.get(url_rooms)
     rooms = res.json()
     rooms_name = {}
@@ -73,7 +72,7 @@ elif page == 'bookings':
     df_rooms.columns = ['会議室名', '定員', '会議室ID']
     st.table(df_rooms)
 
-    url_bookings = 'http://127.0.0.1:8000/bookings'
+    url_bookings = 'https://api-reserve-6grf.onrender.com/bookings'
     res = requests.get(url_bookings)
     bookings = res.json()
     df_bookings = pd.DataFrame(bookings)
@@ -155,7 +154,7 @@ elif page == 'bookings':
             st.error('利用時間は9:00~20:00になります。')
         else:
             # 会議室予約
-            url = 'http://127.0.0.1:8000/bookings'
+            url = 'https://api-reserve-6grf.onrender.com/bookings'
             res = requests.post(
                 url,
                 data=json.dumps(data)
